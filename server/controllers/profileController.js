@@ -1,10 +1,10 @@
 const {
-	get,
+	getProfile,
 	followUser,
 	unfollowUser,
 } = require('../services/profileService')
 
-const getController = async (req, res, next) => {
+const getProfileController = async (req, res, next) => {
 	try {
 
 	} catch (error) {
@@ -29,7 +29,7 @@ const unfollowUserController = async (req, res, next) => {
 }
 
 module.exports = {
-	getController,
+	getProfileController,
 	followUserController,
 	unfollowUserController,
 }

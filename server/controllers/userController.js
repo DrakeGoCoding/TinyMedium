@@ -21,7 +21,7 @@ const loginController = async (req, res, next) => {
 	}
 }
 
-const getController = async (req, res, next) => {
+const getCurrentUserController = async (req, res, next) => {
 	try {
 
 	} catch (error) {
@@ -29,7 +29,7 @@ const getController = async (req, res, next) => {
 	}
 }
 
-const updateController = async (req, res, next) => {
+const updateUserController = async (req, res, next) => {
 	try {
 
 	} catch (error) {
@@ -40,6 +40,6 @@ const updateController = async (req, res, next) => {
 module.exports = {
 	registerController,
 	loginController,
-	getController,
-	updateController,
+	getCurrentUserController,
+	updateUserController,
 }

@@ -1,6 +1,6 @@
 const Profile = require('../models/profile')
 
-const get = async (payload) => {
+const getProfile = async (payload) => {
 
 }
 
@@ -13,7 +13,7 @@ const unfollowUser = async (payload) => {
 }
 
 module.exports = {
-	get,
+	getProfile,
 	followUser,
 	unfollowUser,
 }
