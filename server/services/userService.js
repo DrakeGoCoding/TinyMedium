@@ -9,7 +9,11 @@ const login = async (payload) => {
 
 }
 
-const getCurrentUser = async (payload) => {
+const logout = async (payload) => {
+
+}
+
+const getUser = async (payload) => {
 
 }
 
@@ -20,6 +24,7 @@ const updateUser = async (payload) => {
 module.exports = {
 	register,
 	login,
-	getCurrentUser,
+	logout,
+	getUser,
 	updateUser,
 }

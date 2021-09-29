@@ -1,13 +1,9 @@
-const {
-	getProfileController,
-	followUserController,
-	unfollowUserController,
-} = require('../controllers/profileController')
+const profileController = require('../controllers/profileController')
 
 const router = require('express').Router()
 
-router.get('/:username', getProfileController)
-router.post('/:username/follow', followUserController)
-router.delete('/:username/follow', unfollowUserController)
+router.get('/:username', profileController.getProfileController)
+router.post('/:username/follow', profileController.followUserController)
+router.delete('/:username/follow', profileController.unfollowUserController)
 
 module.exports = router

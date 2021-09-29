@@ -1,9 +1,4 @@
-const {
-	register,
-	login,
-	getCurrentUser,
-	updateUser
-} = require('../services/userService')
+const userService = require('../services/userService')
 
 const registerController = async (req, res, next) => {
 	try {
@@ -21,7 +16,15 @@ const loginController = async (req, res, next) => {
 	}
 }
 
-const getCurrentUserController = async (req, res, next) => {
+const logoutController = async (req, res, next) => {
+	try {
+		
+	} catch (error) {
+		
+	}
+}
+
+const getUserController = async (req, res, next) => {
 	try {
 
 	} catch (error) {
@@ -40,6 +43,7 @@ const updateUserController = async (req, res, next) => {
 module.exports = {
 	registerController,
 	loginController,
-	getCurrentUserController,
+	logoutController,
+	getUserController,
 	updateUserController,
 }

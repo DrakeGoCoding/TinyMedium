@@ -35,8 +35,8 @@ userSchema.pre('save', async function (next) {
 		return next()
 	}
 
-	const hash = await bcrypt.hash(this.password, Number(process.env.SALT_ROUNDS))
-	this.password = hash
+	const hashPassword = await bcrypt.hash(this.password, Number(process.env.SALT_ROUNDS))
+	this.password = hashPassword
 	next()
 })
 

@@ -1,8 +1,4 @@
-const {
-	getProfile,
-	followUser,
-	unfollowUser,
-} = require('../services/profileService')
+const profileService = require('../services/profileService')
 
 const getProfileController = async (req, res, next) => {
 	try {

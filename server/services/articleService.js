@@ -1,61 +1,61 @@
 const Article = require('../models/article')
 
-const getFeed = async (payload) => {
+const getFeed = async (limit = 20, offset = 0) => {
 
 }
 
-const getGlobal = async (payload) => {
+const getGlobal = async (tagFilter, authorFilter, userFilter, limit = 20, offset = 0) => {
 
 }
 
-const getSlug = async (payload) => {
+const getBySlug = async (slug) => {
 
 }
 
-const postSlug = async (payload) => {
+const postArticle = async (article) => {
 
 }
 
-const updateSlug = async (payload) => {
+const updateBySlug = async (slug, article) => {
 
 }
 
-const deleteSlug = async (payload) => {
+const deleteBySlug = async (slug) => {
 
 }
 
-const getComments = async (payload) => {
+const getComments = async (slug) => {
 
 }
 
-const postComment = async (payload) => {
+const postComment = async (slug, comment) => {
 
 }
 
-const deleteComment = async (payload) => {
+const deleteComment = async (slug, id) => {
 
 }
 
-const favoriteSlug = async (payload) => {
+const favoriteBySlug = async (slug) => {
 
 }
 
-const unfavoriteSlug = async (payload) => {
+const unfavoriteBySlug = async (slug) => {
 
 }
 
 module.exports = {
 	getFeed,
 	getGlobal,
-	getSlug,
-	postSlug,
-	updateSlug,
-	deleteSlug,
+	getBySlug,
+	postArticle,
+	updateBySlug,
+	deleteBySlug,
 
 	getComments,
 	postComment,
 	deleteComment,
 
-	favoriteSlug,
-	unfavoriteSlug,
+	favoriteBySlug,
+	unfavoriteBySlug,
 }

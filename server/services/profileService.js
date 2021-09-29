@@ -1,14 +1,14 @@
 const Profile = require('../models/profile')
 
-const getProfile = async (payload) => {
+const getProfile = async (username) => {
 
 }
 
-const followUser = async (payload) => {
+const followUser = async (username) => {
 
 }
 
-const unfollowUser = async (payload) => {
+const unfollowUser = async (username) => {
 
 }
 

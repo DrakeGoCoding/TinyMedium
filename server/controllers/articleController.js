@@ -1,18 +1,4 @@
-const {
-	getFeed,
-	getGlobal,
-	getSlug,
-	postSlug,
-	updateSlug,
-	deleteSlug,
-
-	getComments,
-	postComment,
-	deleteComment,
-
-	favoriteSlug,
-	unfavoriteSlug,
-} = require('../services/articleService')
+const articleService = require('../services/articleService')
 
 const getFeedController = async (req, res, next) => {
 	try {
@@ -30,7 +16,7 @@ const getGlobalController = async (req, res, next) => {
 	}
 }
 
-const getSlugController = async (req, res, next) => {
+const getBySlugController = async (req, res, next) => {
 	try {
 
 	} catch (error) {
@@ -38,7 +24,7 @@ const getSlugController = async (req, res, next) => {
 	}
 }
 
-const postSlugController = async (req, res, next) => {
+const postArticleController = async (req, res, next) => {
 	try {
 
 	} catch (error) {
@@ -46,7 +32,7 @@ const postSlugController = async (req, res, next) => {
 	}
 }
 
-const updateSlugController = async (req, res, next) => {
+const updateBySlugController = async (req, res, next) => {
 	try {
 
 	} catch (error) {
@@ -54,7 +40,7 @@ const updateSlugController = async (req, res, next) => {
 	}
 }
 
-const deleteSlugController = async (req, res, next) => {
+const deleteBySlugController = async (req, res, next) => {
 	try {
 
 	} catch (error) {
@@ -86,7 +72,7 @@ const deleteCommentController = async (req, res, next) => {
 	}
 }
 
-const favoriteSlugController = async (req, res, next) => {
+const favoriteBySlugController = async (req, res, next) => {
 	try {
 
 	} catch (error) {
@@ -94,7 +80,7 @@ const favoriteSlugController = async (req, res, next) => {
 	}
 }
 
-const unfavoriteSlugController = async (req, res, next) => {
+const unfavoriteBySlugController = async (req, res, next) => {
 	try {
 
 	} catch (error) {
@@ -105,15 +91,15 @@ const unfavoriteSlugController = async (req, res, next) => {
 module.exports = {
 	getFeedController,
 	getGlobalController,
-	getSlugController,
-	postSlugController,
-	updateSlugController,
-	deleteSlugController,
+	getBySlugController,
+	postArticleController,
+	updateBySlugController,
+	deleteBySlugController,
 
 	getCommentsController,
 	postCommentController,
 	deleteCommentController,
 
-	favoriteSlugController,
-	unfavoriteSlugController,
+	favoriteBySlugController,
+	unfavoriteBySlugController,
 }
