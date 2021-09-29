@@ -4,7 +4,7 @@ const getFeed = async (limit = 20, offset = 0) => {
 
 }
 
-const getGlobal = async (tagFilter, authorFilter, userFilter, limit = 20, offset = 0) => {
+const getGlobal = async (tagFilter = "", authorFilter = "", userFilter = "", limit = 20, offset = 0) => {
 
 }
 
