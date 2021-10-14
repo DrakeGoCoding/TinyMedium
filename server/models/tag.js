@@ -1,0 +1,16 @@
+const mongoose = require('mongoose');
+
+const tagSchema = mongoose.Schema({
+	name: {
+		type: String,
+		lowercase: true,
+		required: true
+	},
+	count: {
+		type: Number,
+		default: 0
+	}
+})
+
+const Tag = mongoose.model('Tag', tagSchema);
+module.exports = Tag;

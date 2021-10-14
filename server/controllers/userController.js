@@ -1,49 +1,54 @@
 const userService = require('../services/userService')
 
-const registerController = async (req, res, next) => {
+const register = async (req, res, next) => {
 	try {
-
+		const result = await userService.register(req.body.user);
+		res.json(result);
 	} catch (error) {
-
+		next(error);
 	}
 }
 
-const loginController = async (req, res, next) => {
+const login = async (req, res, next) => {
 	try {
-
+		const result = await userService.login(req.body.user);
+		res.json(result);
 	} catch (error) {
-
+		next(error);
 	}
 }
 
-const logoutController = async (req, res, next) => {
+const logout = async (req, res, next) => {
 	try {
-		
+		const result = await userService.logout(req.user);
+		res.json(result);
 	} catch (error) {
-		
+		next(error);
 	}
 }
 
-const getUserController = async (req, res, next) => {
+const currentUser = async (req, res, next) => {
 	try {
-
+		const result = await userService.currentUser(req.user);
+		res.json(result);
 	} catch (error) {
-
+		next(error);
 	}
 }
 
-const updateUserController = async (req, res, next) => {
+const updateUser = async (req, res, next) => {
 	try {
-
+		const result = await userService.updateUser(req.user, req.body.user);
+		res.json(result);
 	} catch (error) {
-
+		next(error);
 	}
 }
 
 module.exports = {
-	registerController,
-	loginController,
-	logoutController,
-	getUserController,
-	updateUserController,
+	register,
+	login,
+	logout,
+	currentUser,
+	updateUser,
 }

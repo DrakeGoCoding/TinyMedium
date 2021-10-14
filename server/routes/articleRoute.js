@@ -1,19 +1,19 @@
 const articleController = require('../controllers/articleController')
+const authMiddleware = require('../middlewares/authMiddleware');
 
 const router = require('express').Router()
 
-router.get('/feed', articleController.getFeedController)
-router.get('/', articleController.getGlobalController)
-router.get('/:slug', articleController.getBySlugController)
-router.post('/', articleController.postArticleController)
-router.put('/:slug', articleController.updateBySlugController)
-router.delete('/:slug', articleController.deleteBySlugController)
+router.get('/', articleController.allArticles);
+router.get('/feed', authMiddleware.verifyUserToken, articleController.feedArticles);
+router.get('/:slug', articleController.articlesBySlug);
+router.post('/', authMiddleware.verifyUserToken, articleController.createArticle);
+router.post('/:slug/favorite', authMiddleware.verifyUserToken, articleController.favoriteArticle);
+router.put('/:slug', authMiddleware.verifyUserToken, articleController.updateArticle);
+router.delete('/:slug', authMiddleware.verifyUserToken, articleController.delArticle);
+router.delete('/:slug/favorite', authMiddleware.verifyUserToken, articleController.unfavoriteArticle);
 
-router.get('/:slug/comments', articleController.getCommentsController)
-router.post('/:slug/comments', articleController.postCommentController)
-router.delete('/:slug/comments/:id', articleController.deleteCommentController)
-
-router.post('/:slug/favorite', articleController.favoriteBySlugController)
-router.delete('/:slug/favorite', articleController.unfavoriteBySlugController)
+router.get('/:slug/comments', articleController.commentsForArticle);
+router.post('/:slug/comments', authMiddleware.verifyUserToken, articleController.createComment);
+router.delete('/:slug/comments/:commentId', authMiddleware.verifyUserToken, articleController.delComment);
 
 module.exports = router

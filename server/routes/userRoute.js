@@ -1,9 +1,9 @@
-const userController = require('../controllers/userController')
-const authMiddleware = require('../middlewares/authMiddleware')
+const router = require('express').Router();
+const userController = require('../controllers/userController');
+const authMiddleware = require('../middlewares/authMiddleware');
 
-const router = require('express').Router()
+router.get('/', authMiddleware.verifyUserToken, userController.currentUser);
+router.put('/', authMiddleware.verifyUserToken, userController.updateUser);
+router.post('/logout', authMiddleware.verifyUserToken, userController.logout);
 
-router.get('/', authMiddleware.verifyUserToken, userController.getUserController)
-router.put('/', authMiddleware.verifyUserToken, userController.updateUserController)
-
-module.exports = router
+module.exports = router;

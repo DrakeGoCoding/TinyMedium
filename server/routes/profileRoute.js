@@ -1,9 +1,10 @@
-const profileController = require('../controllers/profileController')
+const router = require('express').Router();
+const profileController = require('../controllers/profileController');
+const authMiddleware = require('../middlewares/authMiddleware');
+const optionMiddleware = require('../middlewares/optionMiddleware');
 
-const router = require('express').Router()
+router.get('/:username', optionMiddleware.optionalUserToken, profileController.getProfile);
+router.post('/:username/follow', authMiddleware.verifyUserToken, profileController.followUser);
+router.delete('/:username/follow', authMiddleware.verifyUserToken, profileController.unfollowUser);
 
-router.get('/:username', profileController.getProfileController)
-router.post('/:username/follow', profileController.followUserController)
-router.delete('/:username/follow', profileController.unfollowUserController)
-
-module.exports = router
+module.exports = router;

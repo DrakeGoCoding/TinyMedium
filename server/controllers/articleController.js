@@ -1,105 +1,115 @@
 const articleService = require('../services/articleService')
 
-const getFeedController = async (req, res, next) => {
+const allArticles = async (req, res, next) => {
 	try {
-
+		const { author, favorited, limit, offset, tag } = req.query;
+		const result = await articleService.allArticles(author, favorited, limit, offset, tag);
+		res.json(result);
 	} catch (error) {
-
+		next(error);
 	}
 }
 
-const getGlobalController = async (req, res, next) => {
+const feedArticles = async (req, res, next) => {
 	try {
-
+		const { limit, offset } = req.query;
+		const result = await articleService.feedArticles(req.user, limit, offset);
+		res.json(result);
 	} catch (error) {
-
+		next(error);
 	}
 }
 
-const getBySlugController = async (req, res, next) => {
+const articlesBySlug = async (req, res, next) => {
 	try {
-
+		const { slug } = req.params;
+		const result = await articleService.articlesBySlug(slug);
+		res.json(result);
 	} catch (error) {
-
+		next(error);
 	}
 }
 
-const postArticleController = async (req, res, next) => {
+const createArticle = async (req, res, next) => {
 	try {
-
+		const result = await articleService.createArticle(req.user, req.body.article);
+		res.json(result);
 	} catch (error) {
-
+		next(error);
 	}
 }
 
-const updateBySlugController = async (req, res, next) => {
+const favoriteArticle = async (req, res, next) => {
 	try {
-
+		const { slug } = req.params;
+		const result = await articleService.favoriteArticle(slug, req.user);
+		res.json(result);
 	} catch (error) {
-
+		next(error);
 	}
 }
 
-const deleteBySlugController = async (req, res, next) => {
+const updateArticle = async (req, res, next) => {
 	try {
 
 	} catch (error) {
-
+		next(error);
 	}
 }
 
-const getCommentsController = async (req, res, next) => {
+const delArticle = async (req, res, next) => {
 	try {
 
 	} catch (error) {
-
+		next(error);
 	}
 }
 
-const postCommentController = async (req, res, next) => {
+const unfavoriteArticle = async (req, res, next) => {
 	try {
-
+		const { slug } = req.params;
+		const result = await articleService.unfavoriteArticle(slug, req.user);
+		res.json(result);
 	} catch (error) {
-
+		next(error);
 	}
 }
 
-const deleteCommentController = async (req, res, next) => {
+const commentsForArticle = async (req, res, next) => {
 	try {
 
 	} catch (error) {
-
+		next(error);
 	}
 }
 
-const favoriteBySlugController = async (req, res, next) => {
+const createComment = async (req, res, next) => {
 	try {
 
 	} catch (error) {
-
+		next(error);
 	}
 }
 
-const unfavoriteBySlugController = async (req, res, next) => {
+const delComment = async (req, res, next) => {
 	try {
 
 	} catch (error) {
-
+		next(error);
 	}
 }
 
 module.exports = {
-	getFeedController,
-	getGlobalController,
-	getBySlugController,
-	postArticleController,
-	updateBySlugController,
-	deleteBySlugController,
+	allArticles,
+	feedArticles,
+	articlesBySlug,
+	createArticle,
+	favoriteArticle,
+	updateArticle,
+	delArticle,
+	unfavoriteArticle,
 
-	getCommentsController,
-	postCommentController,
-	deleteCommentController,
-
-	favoriteBySlugController,
-	unfavoriteBySlugController,
+	commentsForArticle,
+	createComment,
+	delComment
 }

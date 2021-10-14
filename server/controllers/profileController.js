@@ -1,31 +1,37 @@
 const profileService = require('../services/profileService')
 
-const getProfileController = async (req, res, next) => {
+const getProfile = async (req, res, next) => {
 	try {
-
+		const { username } = req.params;
+		const result = await profileService.getProfile(username, req.user);
+		res.json(result);
 	} catch (error) {
-
+		next(error);
 	}
 }
 
-const followUserController = async (req, res, next) => {
+const followUser = async (req, res, next) => {
 	try {
-
+		const { username } = req.params;
+		const result = await profileService.followUser(username, req.user);
+		res.json(result);
 	} catch (error) {
-
+		next(error);
 	}
 }
 
-const unfollowUserController = async (req, res, next) => {
+const unfollowUser = async (req, res, next) => {
 	try {
-
+		const { username } = req.params;
+		const result = await profileService.unfollowUser(username, req.user);
+		res.json(result);
 	} catch (error) {
-
+		next(error);
 	}
 }
 
 module.exports = {
-	getProfileController,
-	followUserController,
-	unfollowUserController,
+	getProfile,
+	followUser,
+	unfollowUser,
 }
