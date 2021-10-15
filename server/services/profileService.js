@@ -13,7 +13,7 @@ const followUser = async (username, viewer) => {
 		throw ({ code: 404, body: [NOT_FOUND] });
 	}
 
-	if (foundUser.username === viewer.username) {
+	if (foundUser._id.equals(viewer._id)) {
 		throw ({ code: 406, body: [NOT_ACCEPTABLE] });
 	}
 

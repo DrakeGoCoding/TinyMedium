@@ -4,6 +4,7 @@ const tagSchema = mongoose.Schema({
 	name: {
 		type: String,
 		lowercase: true,
+		trim: true,
 		required: true
 	},
 	count: {

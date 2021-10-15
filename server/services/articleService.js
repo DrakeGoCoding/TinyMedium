@@ -1,7 +1,7 @@
 const Article = require('../models/article');
 const Tag = require('../models/tag');
 const User = require('../models/user');
-const { NOT_FOUND } = require('../resources/errors');
+const { NOT_FOUND, NO_SLUG_SPECIFIED, UNAUTHORIZED } = require('../resources/errors');
 const { responseArticle, responseArticles } = require('../utils/responsor');
 const { validateArticle } = require('../utils/validator');
 
@@ -44,7 +44,13 @@ const allArticles = async (author = "", favorited = "", limit = 10, offset = 0, 
 }
 
 const feedArticles = async (user, limit = 10, offset = 0) => {
-	console.log(user);
+	const feedUserIds = [user._id, ...user.following];
+	const articleList = await Article
+		.find({ author: { $in: feedUserIds } })
+		.sort({ updatedAt: -1 })
+		.skip(offset)
+		.limit(limit);
+	return await responseArticles(articleList); s
 }
 
 const articlesBySlug = async (slug) => {
@@ -76,7 +82,7 @@ const createArticle = async (author, article) => {
 	const newArticle = new Article(article);
 	const result = await newArticle.save();
 
-	return { article: await responseArticle(result, author) };
+	return await responseArticle(result, author);
 }
 
 const favoriteArticle = async (slug, user) => {
@@ -98,15 +104,49 @@ const favoriteArticle = async (slug, user) => {
 	return await responseArticle(foundArticle, user);
 }
 
-const updateArticle = async (slug, article) => {
+const updateArticle = async (slug, article, user) => {
 	let foundArticle = await Article.findOne({ slug });
 	if (!foundArticle) {
 		throw { code: 404, body: [NOT_FOUND] };
 	}
+
+	if (!foundArticle.author.equals(user._id)) {
+		throw { code: 401, body: [UNAUTHORIZED] };
+	}
+
+	const { isValid, errors } = validateArticle(article);
+	if (!isValid) {
+		throw { code: 400, body: errors };
+	}
+
+	for (let i = 0; i < article.tagList.length; i++) {
+		let tag = article.tagList[i];
+		const foundTag = await Tag.findOne({ name: tag });
+		if (foundTag) {
+			foundTag.count += 1;
+			await foundTag.save();
+			article.tagList[i] = foundTag._id;
+		} else {
+			const newTag = new Tag({ name: tag, count: 1 });
+			await newTag.save();
+			article.tagList[i] = newTag._id;
+		}
+	}
+
+	Object.assign(foundArticle, article, { updatedAt: Date.now() });
+	const result = await foundArticle.save();
+	return await responseArticle(result);
 }
 
-const delArticle = async (slug) => {
+const delArticle = async (user, slug) => {
+	if (!slug) {
+		throw { code: 400, body: [NO_SLUG_SPECIFIED] };
+	}
 
+	const deleteArticle = await Article.findOneAndDelete({ author: user._id, slug }, { new: true });
+	if (!deleteArticle) {
+		throw { code: 401, body: [UNAUTHORIZED] };
+	}
 }
 
 const unfavoriteArticle = async (slug, user) => {

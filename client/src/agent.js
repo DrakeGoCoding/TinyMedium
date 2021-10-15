@@ -24,6 +24,8 @@ const Auth = {
 		instance.put('/user', { user }),
 	login: (email, password) =>
 		instance.post('/users/login', { user: { email, password } }),
+	logout: () =>
+		instance.post('/user/logout'),
 	register: (username, email, password) =>
 		instance.post('/users', { user: { username, email, password } }),
 };

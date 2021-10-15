@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 const { validateUser } = require('../utils/validator');
-const { REGISTER, LOGIN } = require('../resources/actionTypes');
+const { REGISTER, LOGIN, UPDATE } = require('../resources/actionTypes');
 const { REGISTERED_EMAIL, INCORRECT_EMAIL_OR_PASSWORD, UNAUTHORIZED, REGISTERED_USERNAME } = require('../resources/errors');
 const { responseUser } = require('../utils/responsor');
 
@@ -70,16 +70,21 @@ const logout = async (user) => {
 }
 
 const currentUser = async (payload) => {
-	return { user: responseUser(payload) };
+	return responseUser(payload);
 }
 
 const updateUser = async (user, toUpdateUser) => {
 	if (user.email !== toUpdateUser.email) {
-		throw { code: 401, body: [UNAUTHORIZED] }
+		throw { code: 401, body: [UNAUTHORIZED] };
 	}
+
+	const { isValid, errors } = validateUser(toUpdateUser, UPDATE);
+	if (!isValid) {
+		throw { code: 400, body: errors };
+	}
+
 	Object.assign(user, toUpdateUser);
 	const result = await user.save();
-
 	return responseUser(result);
 }
 

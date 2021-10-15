@@ -1,8 +1,9 @@
-const { LOGIN, REGISTER } = require("../resources/actionTypes");
-const { INVALID_EMAIL_OR_PASSWORD, INVALID_USERNAME, INVALID_EMAIL, INVALID_PASSWORD } = require("../resources/errors");
+const { LOGIN, REGISTER, UPDATE } = require("../resources/actionTypes");
+const { INVALID_EMAIL_OR_PASSWORD, INVALID_USERNAME, INVALID_EMAIL, INVALID_PASSWORD, INVALID_TITLE, INVALID_DESCRIPTION, INVALID_BODY } = require("../resources/errors");
 
 const validateUser = (user, type) => {
 	let isValid = true;
+	let isValidEmail = true, isValidUsername = true, isValidPassword = true;
 	let errors = [];
 	const { username, email, password } = user;
 
@@ -13,18 +14,32 @@ const validateUser = (user, type) => {
 				errors.push(INVALID_EMAIL_OR_PASSWORD)
 			}
 			break;
+
 		case REGISTER:
-			let isValidUsername = validateUsername(username);
+			isValidUsername = validateUsername(username);
 			!isValidUsername && errors.push(INVALID_USERNAME);
 
-			let isValidEmail = validateEmail(email);
+			isValidEmail = validateEmail(email);
 			!isValidEmail && errors.push(INVALID_EMAIL);
 
-			let isValidPassword = validatePassword(password);
+			isValidPassword = validatePassword(password);
 			!isValidPassword && errors.push(INVALID_PASSWORD);
 
 			isValid = isValidUsername && isValidEmail && isValidPassword;
 			break;
+
+		case UPDATE:
+			if (username) {
+				isValidUsername = validateUsername(username);
+				!isValidUsername && errors.push(INVALID_USERNAME);
+			}
+			if (password) {
+				isValidPassword = validatePassword(password);
+				!isValidPassword && errors.push(INVALID_PASSWORD);
+			}
+			isValid = isValidEmail && isValidPassword;
+			break;
+
 		default:
 			break;
 	}
@@ -49,8 +64,19 @@ const validatePassword = (password) => {
 const validateArticle = (article) => {
 	let isValid = true;
 	let errors = [];
-	// TO DO
-	return { isValid, errors }
+	if (!article.title.trim().length) {
+		isValid = false;
+		errors.push(INVALID_TITLE);
+	};
+	if (!article.description.trim().length) {
+		isValid = false;
+		errors.push(INVALID_DESCRIPTION);
+	}
+	if (!article.body.trim().length) {
+		isValid = false;
+		errors.push(INVALID_BODY);
+	}
+	return { isValid, errors };
 }
 
 module.exports = {

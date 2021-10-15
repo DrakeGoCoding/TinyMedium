@@ -11,19 +11,22 @@ const articleSchema = mongoose.Schema({
 	title: {
 		type: String,
 		required: true,
+		trim: true,
 	},
 	description: {
 		type: String,
-		default: ""
+		required: true,
+		trim: true,
 	},
 	body: {
 		type: String,
-		default: ""
+		required: true,
+		trim: true,
 	},
 	slug: {
 		type: String,
 		slug: ["title"],
-		unique: true
+		unique: true,
 	},
 	tagList: {
 		type: [{

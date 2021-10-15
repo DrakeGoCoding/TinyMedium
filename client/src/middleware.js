@@ -7,12 +7,10 @@ export const promiseMiddleware = store => next => action => {
 
 		action.payload.then(
 			res => {
-				console.log(res);
 				action.payload = res;
 				store.dispatch(action);
 			},
 			error => {
-				console.log(error);
 				action.error = true;
 				action.payload = error.response;
 				store.dispatch(action);

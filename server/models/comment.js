@@ -15,6 +15,7 @@ const commentSchema = mongoose.Schema({
 		type: String,
 		default: "",
 		required: true,
+		trim: true,
 	},
 	createdAt: {
 		type: Date,

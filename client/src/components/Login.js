@@ -14,9 +14,7 @@ export default function Login() {
 		store.dispatch({ type: LOGIN, payload });
 	}
 
-	const onUnload = () => {
-		store.dispatch({ type: LOGIN_PAGE_UNLOADED });
-	}
+	const onUnload = () => store.dispatch({ type: LOGIN_PAGE_UNLOADED });
 
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');

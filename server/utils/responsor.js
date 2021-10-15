@@ -38,7 +38,7 @@ const responseArticle = async (article, viewer) => {
 
 	return {
 		article: {
-			author: responseProfile(author, viewer),
+			author: responseProfile(author, viewer).profile,
 			slug: article.slug,
 			title: article.title,
 			description: article.description,

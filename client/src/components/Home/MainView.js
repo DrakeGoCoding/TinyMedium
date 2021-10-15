@@ -1,6 +1,8 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 import agent from '../../agent';
+import { CHANGE_TAB } from '../../constants/actionTypes';
+import { store } from '../../store';
 import ArticleList from '../ArticleList';
 
 function YourFeedTab(props) {
@@ -65,7 +67,12 @@ export default function MainView() {
 	const token = useSelector(state => state.common.token);
 
 	const onTabClick = (tab, pager, payload) => {
-		
+		store.dispatch({
+			type: CHANGE_TAB,
+			tab,
+			pager,
+			payload
+		});
 	}
 
 	return (

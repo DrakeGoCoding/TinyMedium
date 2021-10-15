@@ -51,7 +51,9 @@ const favoriteArticle = async (req, res, next) => {
 
 const updateArticle = async (req, res, next) => {
 	try {
-
+		const { slug } = req.params;
+		const result = await articleService.updateArticle(slug, req.body.article, req.user);
+		res.json(result);
 	} catch (error) {
 		next(error);
 	}
@@ -59,7 +61,9 @@ const updateArticle = async (req, res, next) => {
 
 const delArticle = async (req, res, next) => {
 	try {
-
+		const { slug } = req.params;
+		const result = await articleService.delArticle(req.user, slug);
+		res.json(result);
 	} catch (error) {
 		next(error);
 	}
