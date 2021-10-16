@@ -10,6 +10,7 @@ export default function editorReducer(state = {}, action) {
 		case EDITOR_PAGE_LOADED:
 			return {
 				...state,
+				author: action.payload ? action.payload.data.article.author : null,
 				slug: action.payload ? action.payload.data.article.slug : '',
 				title: action.payload ? action.payload.data.article.title : '',
 				description: action.payload ? action.payload.data.article.description : '',

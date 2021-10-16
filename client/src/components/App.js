@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, useHistory } from 'react-router-dom';
 import agent from '../agent';
 import { APP_LOAD, REDIRECT } from '../constants/actionTypes';
 import { store } from '../store';

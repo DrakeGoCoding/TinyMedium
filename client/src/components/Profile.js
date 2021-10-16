@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import agent from '../agent';
@@ -56,7 +56,8 @@ export default function Profile() {
 	const articleList = useSelector(state => state.articleList);
 	const currentUser = useSelector(state => state.common.currentUser);
 	const profile = useSelector(state => state.profile);
-	const isUser = currentUser && profile.username === currentUser.username;
+
+	const [isUser, setIsUser] = useState(false);
 
 	const onFollow = (username) => store.dispatch({
 		type: FOLLOW_USER,
@@ -86,6 +87,10 @@ export default function Profile() {
 	}, [username]);
 
 	useEffect(() => {
+		setIsUser(currentUser && profile && profile.username === currentUser.username);
+	}, [currentUser, profile]);
+
+	useEffect(() => {
 		return () => {
 			onUnload();
 		}
@@ -104,11 +109,24 @@ export default function Profile() {
 								<p>{profile.bio}</p>
 
 								<EditProfileSettings isUser={isUser} />
-								<FollowUserButton
-									isUser={isUser}
-									user={profile}
-									follow={onFollow}
-									unfollow={onUnfollow} />
+
+								{
+									currentUser
+										?
+										<FollowUserButton
+											isUser={isUser}
+											user={profile}
+											follow={onFollow}
+											unfollow={onUnfollow} />
+										:
+										<p>
+											<Link to="/login">Sign in</Link>
+											&nbsp;or&nbsp;
+											<Link to="/register">sign up</Link>
+											&nbsp;to follow the user.
+										</p>
+								}
+
 							</div>
 						</div>
 					</div>

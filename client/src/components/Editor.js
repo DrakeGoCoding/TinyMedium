@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import agent from '../agent';
 import { ADD_TAG, ARTICLE_SUBMITTED, EDITOR_PAGE_LOADED, EDITOR_PAGE_UNLOADED, REMOVE_TAG, UPDATE_FIELD_EDITOR } from '../constants/actionTypes'
@@ -8,8 +8,11 @@ import ListErrors from './ListErrors';
 
 export default function Editor() {
 	const { slug } = useParams();
+	const history = useHistory();
 
 	const editor = useSelector(state => state.editor);
+	const currentUser = useSelector(state => state.common.currentUser);
+
 	const onLoad = (payload) => store.dispatch({ type: EDITOR_PAGE_LOADED, payload });
 	const onUnload = () => store.dispatch({ type: EDITOR_PAGE_UNLOADED });
 	const onUpdateField = (key, value) => store.dispatch({ type: UPDATE_FIELD_EDITOR, key, value });
@@ -49,8 +52,6 @@ export default function Editor() {
 			tagList: editor.tagList
 		};
 
-		console.log(article);
-
 		store.dispatch({
 			type: ARTICLE_SUBMITTED,
 			payload: editor.slug
@@ -61,7 +62,17 @@ export default function Editor() {
 
 	useEffect(() => {
 		onLoad(slug ? agent.Articles.bySlug(slug) : null);
-	}, [slug])
+	}, [slug]);
+
+	useEffect(() => {
+		if (editor.author && currentUser) {
+			if (editor.author.username !== currentUser.username) {
+				history.push('/');
+			}
+		} else {
+			history.push('/')
+		}
+	}, [editor.author, currentUser, history]);
 
 	useEffect(() => {
 		return () => {
