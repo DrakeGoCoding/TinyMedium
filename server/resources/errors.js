@@ -1,5 +1,6 @@
 const INCORRECT_EMAIL_OR_PASSWORD = 'email or password is incorrect';
 const INVALID_BODY = 'body cannot be blank';
+const INVALID_COMMENT = 'comment cannot be blank';
 const INVALID_DESCRIPTION = 'description cannot be blank';
 const INVALID_EMAIL_OR_PASSWORD = 'invalid email or password';
 const INVALID_EMAIL = 'email is invalid';
@@ -18,6 +19,7 @@ const UNAUTHORIZED = 'unauthorized request';
 module.exports = {
 	INCORRECT_EMAIL_OR_PASSWORD,
 	INVALID_BODY,
+	INVALID_COMMENT,
 	INVALID_DESCRIPTION,
 	INVALID_EMAIL_OR_PASSWORD,
 	INVALID_EMAIL,

@@ -1,16 +1,22 @@
 const Article = require('../models/article');
+const Comment = require('../models/comment');
 const Tag = require('../models/tag');
 const User = require('../models/user');
 const { NOT_FOUND, NO_SLUG_SPECIFIED, UNAUTHORIZED } = require('../resources/errors');
-const { responseArticle, responseArticles } = require('../utils/responsor');
-const { validateArticle } = require('../utils/validator');
+const {
+	responseArticle,
+	responseArticles,
+	responseComment,
+	responseComments
+} = require('../utils/responsor');
+const { validateArticle, validateComment } = require('../utils/validator');
 
-const allArticles = async (author = "", favorited = "", limit = 10, offset = 0, tag = "") => {
+const allArticles = async (author, favorited, limit = 10, offset = 0, tag, viewer) => {
 	let articles = [];
 	let articlesCount = 0;
 	let filter = {};
 
-	if (author) {
+	if (author && author.trim().length > 0) {
 		const foundAuthor = await User.findOne({ username: author });
 		if (!foundAuthor) {
 			return { articles, articlesCount };
@@ -18,15 +24,15 @@ const allArticles = async (author = "", favorited = "", limit = 10, offset = 0, 
 		filter['author'] = foundAuthor._id;
 	}
 
-	if (favorited) {
+	if (favorited && favorited.trim().length > 0) {
 		const foundFavoritedUser = await User.findOne({ username: favorited });
 		if (!foundFavoritedUser) {
 			return { articles, articlesCount };
 		}
-		filter['favorited'] = foundFavoritedUser._id;
+		filter['favoritedBy'] = foundFavoritedUser._id;
 	}
 
-	if (tag) {
+	if (tag && tag.trim().length > 0) {
 		const foundTag = await Tag.findOne({ name: tag });
 		if (!foundTag) {
 			return { articles, articlesCount };
@@ -36,26 +42,23 @@ const allArticles = async (author = "", favorited = "", limit = 10, offset = 0, 
 
 	articles = await Article
 		.find(filter)
-		.sort({ updatedAt: -1 })
-		.skip(offset)
-		.limit(limit);
+		.sort({ updatedAt: -1 });
 
-	return await responseArticles(articles);
+	return await responseArticles(articles, limit, offset, viewer);
 }
 
 const feedArticles = async (user, limit = 10, offset = 0) => {
 	const feedUserIds = [user._id, ...user.following];
 	const articleList = await Article
 		.find({ author: { $in: feedUserIds } })
-		.sort({ updatedAt: -1 })
-		.skip(offset)
-		.limit(limit);
-	return await responseArticles(articleList); s
+		.sort({ updatedAt: -1 });
+
+	return await responseArticles(articleList, limit, offset, user);
 }
 
-const articlesBySlug = async (slug) => {
+const articlesBySlug = async (slug, viewer) => {
 	const result = await Article.findOne({ slug });
-	return await responseArticle(result);
+	return await responseArticle(result, viewer);
 }
 
 const createArticle = async (author, article) => {
@@ -91,12 +94,12 @@ const favoriteArticle = async (slug, user) => {
 		throw { code: 404, body: [NOT_FOUND] };
 	}
 
-	if (!foundArticle.favoritedBy.includes(user._id)) {
+	if (!foundArticle.favoritedBy.some(id => id.equals(user._id))) {
 		foundArticle.favoritedBy.push(user._id);
 		await foundArticle.save();
 	}
 
-	if (!user.favoritedArticles.includes(foundArticle._id)) {
+	if (!user.favoritedArticles.some(id => id.equals(foundArticle._id))) {
 		user.favoritedArticles.push(foundArticle._id);
 		await user.save();
 	}
@@ -170,16 +173,55 @@ const unfavoriteArticle = async (slug, user) => {
 	return await responseArticle(foundArticle, user);
 }
 
-const commentsForArticle = async (slug) => {
+const commentsForArticle = async (slug, viewer) => {
+	const foundArticle = await Article.findOne({ slug });
+	if (!foundArticle) {
+		throw { code: 404, body: [NOT_FOUND] };
+	}
 
+	const comments = await Comment
+		.find({ _id: { $in: foundArticle.comments } })
+		.sort({ updatedAt: -1 });
+	return await responseComments(comments, viewer);
 }
 
-const createComment = async (slug, comment) => {
+const createComment = async (slug, comment, author) => {
+	const foundArticle = await Article.findOne({ slug });
+	if (!foundArticle) {
+		throw { code: 404, body: [NOT_FOUND] };
+	}
 
+	const { isValid, errors } = validateComment(comment);
+	if (!isValid) {
+		throw { code: 400, body: errors };
+	}
+
+	const newComment = new Comment({
+		author: author._id,
+		body: comment.body
+	})
+
+	const result = await newComment.save();
+	foundArticle.comments.push(result._id);
+	foundArticle.updatedAt = Date.now();
+	await foundArticle.save();
+
+	return await responseComment(result, author);
 }
 
-const delComment = async (slug, commentId) => {
+const delComment = async (slug, commentId, user) => {
+	const foundArticle = await Article.findOne({ slug });
+	if (!foundArticle) {
+		throw { code: 404, body: [NOT_FOUND] };
+	}
 
+	const result = await Comment.findOneAndDelete({ _id: commentId, author: user._id });
+	if (!result) {
+		throw { code: 401, body: [UNAUTHORIZED] };
+	}
+
+	foundArticle.comments = foundArticle.comments.filter(id => !id.equals(commentId));
+	await foundArticle.save();
 }
 
 module.exports = {

@@ -5,6 +5,7 @@ import auth from './auth';
 import editor from './editor';
 import home from './home';
 import common from './common';
+import profile from './profile';
 import settings from './settings';
 
 export default combineReducers({
@@ -14,5 +15,6 @@ export default combineReducers({
 	editor,
 	home,
 	common,
+	profile,
 	settings,
 });

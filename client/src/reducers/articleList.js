@@ -4,7 +4,10 @@ import {
 	ARTICLE_UNFAVORITED,
 	CHANGE_TAB,
 	HOME_PAGE_LOADED,
-	HOME_PAGE_UNLOADED
+	HOME_PAGE_UNLOADED,
+	PROFILE_PAGE_LOADED,
+	PROFILE_PAGE_UNLOADED,
+	SET_PAGE
 } from "../constants/actionTypes";
 
 export default function articleListReducer(state = {}, action) {
@@ -55,6 +58,23 @@ export default function articleListReducer(state = {}, action) {
 				tab: action.tab
 			};
 		case HOME_PAGE_UNLOADED:
+			return {};
+		case SET_PAGE:
+			return {
+				...state,
+				articles: action.payload.data.articles,
+				articlesCount: action.payload.data.articlesCount,
+				currentPage: action.page,
+			}
+		case PROFILE_PAGE_LOADED:
+			return {
+				...state,
+				pager: action.pager,
+				articles: action.payload[1].data.articles,
+				articlesCount: action.payload[1].data.articlesCount,
+				currentPage: 0,
+			};
+		case PROFILE_PAGE_UNLOADED:
 			return {};
 		default:
 			return state;

@@ -1,10 +1,11 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/user');
+const { SYSTEM_ERROR, INVALID_TOKEN } = require('../resources/errors');
 
 const optionalUserToken = (req, res, next) => {
 	let token = req.headers.authorization;
 	if (!token) {
-		next();
+		return next();
 	}
 
 	try {
@@ -27,6 +28,7 @@ const optionalUserToken = (req, res, next) => {
 			next();
 		})
 	} catch (error) {
+		console.log(error);
 		res.status(500).send({ errors: [SYSTEM_ERROR] });
 	}
 }

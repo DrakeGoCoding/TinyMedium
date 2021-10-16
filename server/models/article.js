@@ -28,12 +28,19 @@ const articleSchema = mongoose.Schema({
 		slug: ["title"],
 		unique: true,
 	},
+	comments: {
+		type: [{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Comment',
+		}],
+		default: [],
+	},
 	tagList: {
 		type: [{
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'Tag',
 		}],
-		default: []
+		default: [],
 	},
 	createdAt: {
 		type: Date,
@@ -48,8 +55,8 @@ const articleSchema = mongoose.Schema({
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'User',
 		}],
-		default: []
-	}
+		default: [],
+	},
 });
 
 const Article = mongoose.model('Article', articleSchema);

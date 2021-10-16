@@ -41,8 +41,8 @@ const omitSlug = article => Object.assign({}, article, { slug: undefined })
 const Articles = {
 	all: page =>
 		instance.get(`/articles?${limit(10, page)}`),
-	feed: () =>
-		instance.get(`/articles/feed?${limit(10, 0)}`),
+	feed: page =>
+		instance.get(`/articles/feed?${limit(10, page)}`),
 	byAuthor: (username, page) =>
 		instance.get(`/articles?author=${encode(username)}&${limit(10, page)}`),
 	byTag: (tag, page) =>

@@ -3,7 +3,7 @@ const articleService = require('../services/articleService')
 const allArticles = async (req, res, next) => {
 	try {
 		const { author, favorited, limit, offset, tag } = req.query;
-		const result = await articleService.allArticles(author, favorited, limit, offset, tag);
+		const result = await articleService.allArticles(author, favorited, limit, offset, tag, req.user);
 		res.json(result);
 	} catch (error) {
 		next(error);
@@ -23,7 +23,7 @@ const feedArticles = async (req, res, next) => {
 const articlesBySlug = async (req, res, next) => {
 	try {
 		const { slug } = req.params;
-		const result = await articleService.articlesBySlug(slug);
+		const result = await articleService.articlesBySlug(slug, req.user);
 		res.json(result);
 	} catch (error) {
 		next(error);
@@ -81,7 +81,9 @@ const unfavoriteArticle = async (req, res, next) => {
 
 const commentsForArticle = async (req, res, next) => {
 	try {
-
+		const { slug } = req.params;
+		const result = await articleService.commentsForArticle(slug);
+		res.json(result);
 	} catch (error) {
 		next(error);
 	}
@@ -89,7 +91,9 @@ const commentsForArticle = async (req, res, next) => {
 
 const createComment = async (req, res, next) => {
 	try {
-
+		const { slug } = req.params;
+		const result = await articleService.createComment(slug, req.body.comment, req.user);
+		res.json(result);
 	} catch (error) {
 		next(error);
 	}
@@ -97,7 +101,9 @@ const createComment = async (req, res, next) => {
 
 const delComment = async (req, res, next) => {
 	try {
-
+		const { slug, commentId } = req.params;
+		const result = await articleService.delComment(slug, commentId, req.user);
+		res.json(result);
 	} catch (error) {
 		next(error);
 	}

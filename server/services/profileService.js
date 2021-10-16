@@ -17,11 +17,11 @@ const followUser = async (username, viewer) => {
 		throw ({ code: 406, body: [NOT_ACCEPTABLE] });
 	}
 
-	if (!foundUser.followedBy.includes(viewer._id)) {
+	if (!foundUser.followedBy.some(id => id.equals(viewer._id))) {
 		foundUser.followedBy.push(viewer._id);
 		await foundUser.save();
 	}
-	if (!viewer.following.includes(foundUser._id)) {
+	if (!viewer.following.some(id => id.equals(foundUser._id))) {
 		viewer.following.push(foundUser._id);
 		await viewer.save();
 	}

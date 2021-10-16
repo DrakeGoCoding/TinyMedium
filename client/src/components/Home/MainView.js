@@ -93,7 +93,6 @@ export default function MainView() {
 			<ArticleList
 				pager={articleList.pager}
 				articles={articleList.articles}
-				loading={articleList.loading}
 				articlesCount={articleList.articlesCount}
 				currentPage={articleList.currentPage} />
 		</div>

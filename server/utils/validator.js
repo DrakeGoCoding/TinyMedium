@@ -1,5 +1,5 @@
 const { LOGIN, REGISTER, UPDATE } = require("../resources/actionTypes");
-const { INVALID_EMAIL_OR_PASSWORD, INVALID_USERNAME, INVALID_EMAIL, INVALID_PASSWORD, INVALID_TITLE, INVALID_DESCRIPTION, INVALID_BODY } = require("../resources/errors");
+const { INVALID_EMAIL_OR_PASSWORD, INVALID_USERNAME, INVALID_EMAIL, INVALID_PASSWORD, INVALID_TITLE, INVALID_DESCRIPTION, INVALID_BODY, INVALID_COMMENT } = require("../resources/errors");
 
 const validateUser = (user, type) => {
 	let isValid = true;
@@ -79,7 +79,18 @@ const validateArticle = (article) => {
 	return { isValid, errors };
 }
 
+const validateComment = (comment) => {
+	let isValid = true;
+	let errors = [];
+	if (!comment.body.trim().length) {
+		isValid = false;
+		errors.push(INVALID_COMMENT);
+	}
+	return { isValid, errors };
+}
+
 module.exports = {
 	validateUser,
 	validateArticle,
+	validateComment,
 }
