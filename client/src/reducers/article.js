@@ -5,8 +5,8 @@ export default function articleReducer(state = {}, action) {
 		case ARTICLE_PAGE_LOADED:
 			return {
 				...state,
-				article: action.payload ? action.payload[0].data.article : null,
-				comments: action.payload ? action.payload[1].data.comments : [],
+				article: action.error ? null : action.payload[0].data.article,
+				comments: action.error ? [] : action.payload[1].data.comments,
 			};
 		case ARTICLE_PAGE_UNLOADED:
 			return {};

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import agent from '../../agent';
 import { ARTICLE_PAGE_LOADED, ARTICLE_PAGE_UNLOADED } from '../../constants/actionTypes';
@@ -10,6 +10,7 @@ import CommentContainer from './CommentContainer';
 
 export default function Article() {
 	const { slug } = useParams();
+	const history = useHistory();
 
 	const article = useSelector(state => state.article.article);
 	const comments = useSelector(state => state.article.comments);
@@ -33,12 +34,12 @@ export default function Article() {
 
 	useEffect(() => {
 		if (currentUser && article) {
-			if (currentUser.username === article.author.username) {
-				setEditable(true);
-			}
+			setEditable(currentUser.username === article.author.username);
 			setMarkup({ __html: marked(article.body, { sanitize: true }) });
+		} else {
+			history.push('/');
 		}
-	}, [article, currentUser])
+	}, [article, currentUser, history])
 
 	useEffect(() => {
 		return () => {
