@@ -5,7 +5,8 @@ const tagSchema = mongoose.Schema({
 		type: String,
 		lowercase: true,
 		trim: true,
-		required: true
+		required: true,
+		uniqued: true,
 	},
 	count: {
 		type: Number,

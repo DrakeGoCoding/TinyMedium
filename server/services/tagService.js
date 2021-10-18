@@ -11,8 +11,14 @@ const popularTags = async () => {
 	return responseTags(tagList);
 }
 
-const createTag = async (tag) => {
-	const newTag = new Tag(tag);
+const createTag = async (tagName) => {
+	const foundTag = await Tag.findOne({ name: tagName.toLowerCase() });
+	if (foundTag) {
+		foundTag.count += 1;
+		await foundTag.save();
+		return responseTag(foundTag);
+	}
+	const newTag = new Tag(tagName);
 	const result = await newTag.save();
 	return responseTag(result);
 }
