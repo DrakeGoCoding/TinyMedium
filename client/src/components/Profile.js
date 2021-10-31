@@ -50,7 +50,7 @@ function FollowUserButton(props) {
 	);
 }
 
-export default function Profile() {
+export default function Profile({ isFavorite = false }) {
 	const { username } = useParams();
 
 	const articleList = useSelector(state => state.articleList);
@@ -77,14 +77,18 @@ export default function Profile() {
 	useEffect(() => {
 		if (username) {
 			onLoad(
-				(page) => agent.Articles.byAuthor(username, page),
+				(page) => isFavorite
+					? agent.Articles.favoritedBy(username, page)
+					: agent.Articles.byAuthor(username, page),
 				Promise.all([
 					agent.Profile.get(username),
-					agent.Articles.byAuthor(username)
+					isFavorite
+						? agent.Articles.favoritedBy(username)
+						: agent.Articles.byAuthor(username)
 				])
 			);
 		}
-	}, [username]);
+	}, [username, isFavorite]);
 
 	useEffect(() => {
 		setIsUser(currentUser && profile && profile.username === currentUser.username);
@@ -139,7 +143,7 @@ export default function Profile() {
 								<ul className="nav nav-pills outline-active">
 									<li className="nav-item">
 										<Link
-											className="nav-link active"
+											className={isFavorite ? "nav-link" : "nav-link active"}
 											to={`/@${profile.username}`}>
 											My Articles
 										</Link>
@@ -147,7 +151,7 @@ export default function Profile() {
 
 									<li className="nav-item">
 										<Link
-											className="nav-link"
+											className={!isFavorite ? "nav-link" : "nav-link active"}
 											to={`/@${profile.username}/favorites`}>
 											Favorited Articles
 										</Link>
