@@ -36,8 +36,6 @@ export default function Article() {
 		if (currentUser && article) {
 			setEditable(currentUser.username === article.author.username);
 			setMarkup({ __html: marked(article.body, { sanitize: true }) });
-		} else {
-			history.push('/');
 		}
 	}, [article, currentUser, history])
 
